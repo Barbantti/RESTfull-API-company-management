@@ -1,0 +1,123 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./prismaClient"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id              String            @id @default(uuid())
+  firstName       String            @db.VarChar(75)
+  lastName        String            @db.VarChar(75)
+  birthDate       DateTime          @db.Date
+  email           String            @unique @db.VarChar(75)
+  phone           String            @db.VarChar(75)
+  address         String            @db.VarChar(75)
+  roleLevel       RoleLevel?        @default(customer)
+  password        String            @db.VarChar(75)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  budgets         Budgets[]
+  serviceProvided ServiceProvided[]
+}
+
+model Employees {
+  id              String            @id @default(uuid())
+  firstName       String            @db.VarChar(75)
+  lastName        String            @db.VarChar(75)
+  birthDate       DateTime          @db.Date
+  hireDate        DateTime          @db.Date
+  email           String            @unique @db.VarChar(75)
+  phone           String            @db.VarChar(75)
+  address         String            @db.VarChar(75)
+  wage            String            @db.VarChar(75)
+  role            String            @db.VarChar(75)
+  roleLevel       RoleLevel?        @default(customer)
+  positionTitle   String            @db.VarChar(75)
+  password        String            @db.VarChar(75)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  department      String?           @default(uuid())
+  serviceProvided ServiceProvided[]
+  departments     DeptEmployee[]
+}
+
+enum RoleLevel {
+  customer
+  employee
+  developer
+}
+
+model Departments {
+  id        String         @id @default(uuid())
+  name      DeptAreas
+  isActive  Boolean
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  employees DeptEmployee[]
+}
+
+model DeptEmployee {
+  guid_deptEmp String      @id @default(uuid())
+  employeeId   String
+  deptId       String
+  employee     Employees   @relation(fields: [employeeId], references: [id])
+  departments  Departments @relation(fields: [deptId], references: [id])
+}
+
+enum DeptAreas {
+  management
+  humanResources
+  financialSector
+  commercialSector
+  operationalSector
+  administrativeSector
+  other
+}
+
+model Budgets {
+  id                 String            @id @default(uuid())
+  servicePrice       String            @db.VarChar(75)
+  serviceDescription String            @db.VarChar(75)
+  serviceStatus      ServiceStatus?    @default(notRequested)
+  paymentStatus      PaymentStatus?    @default(notPaid)
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  servicesProvided   ServiceProvided[]
+  customer           Customer?         @relation(fields: [customerId], references: [id])
+  customerId         String?
+}
+
+model ServiceProvided {
+  id            String        @id @default(uuid())
+  customer      Customer      @relation(fields: [customerId], references: [id])
+  budget        Budgets       @relation(fields: [budgetId], references: [id])
+  employee      Employees     @relation(fields: [employeeId], references: [id])
+  serviceStatus ServiceStatus
+  paymentStatus PaymentStatus
+  customerId    String
+  budgetId      String
+  employeeId    String
+}
+
+enum ServiceStatus {
+  notRequested
+  requested
+  approved
+  recused
+  inProduction
+  finished
+}
+
+enum PaymentStatus {
+  notPaid
+  pending
+  denied
+  paid
+}
