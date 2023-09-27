@@ -11,11 +11,11 @@ import { CustomerService } from './customer.service';
 import { ICustomer } from 'src/interfaces/interfaces';
 import { GetId } from 'src/decorators/param-id.decorator';
 import { Roles } from 'src/decorators/roles.decorator';
-import { CustomerAuthenticationGuard } from 'src/Guards/customerAuthentication.guard';
-import { CustomerRoleGuard } from 'src/Guards/customerRole.guard';
+import { RoleGuard } from 'src/Guards/role.guard';
+import { AuthGuard } from 'src/Guards/auth.guard';
 
 @Roles(['developer'])
-@UseGuards(CustomerAuthenticationGuard, CustomerRoleGuard)
+@UseGuards(AuthGuard, RoleGuard)
 @Controller('customer')
 export class CustomerController {
   constructor(private readonly customerService: CustomerService) {}

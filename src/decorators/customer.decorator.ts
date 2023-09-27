@@ -12,6 +12,7 @@ export const CustomerDecorator = createParamDecorator(
       request.customer[filter];
       if (filter) {
       } else {
+        console.log('request.customer', request.customer)
         return request.customer;
       }
     } else {

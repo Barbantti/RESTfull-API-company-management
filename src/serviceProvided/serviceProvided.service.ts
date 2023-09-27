@@ -15,6 +15,7 @@ export class ServiceProvidedService {
     customerId: string,
     employeeData: any,
   ) {
+    console.log('createNewBudget: ', data, customerId, employeeData);
     try {
       const { servicePrice, serviceDescription, serviceStatus, paymentStatus } =
         data;
@@ -157,12 +158,14 @@ export class ServiceProvidedService {
 
   // Search all service Provided on db
   async getAllBudget() {
+    console.log('getAllBudgets', );
     return await this.prisma.serviceProvided.findMany();
   }
 
   // Search service provided by id
   async getBudgetById(id: string) {
     await this.checkServiceProvidedId(id);
+    console.log('getBudgetById: ', id);
 
     if (id) {
       return await this.prisma.serviceProvided.findUnique({
@@ -178,6 +181,7 @@ export class ServiceProvidedService {
   // Updating service provided data by id
   async updateBudgetData(data: NewBudgetDTO, serviceId: string) {
     await this.checkServiceProvidedId(serviceId);
+    console.log('updateBudgetData: ', data, serviceId);
 
     if (data && serviceId) {
       return await this.prisma.serviceProvided.update({
@@ -195,6 +199,7 @@ export class ServiceProvidedService {
   // Delete a service provided
   async deleteBudgetData(serviceId: string) {
     await this.checkServiceProvidedId(serviceId);
+    console.log('deleteBudgetData: ', serviceId);
 
     if (serviceId) {
       return await this.prisma.serviceProvided.delete({
@@ -211,6 +216,7 @@ export class ServiceProvidedService {
 
   // Checking if service provided id exist
   async checkServiceProvidedId(serviceId: string) {
+    console.log('checkServiceProvidedId: ', serviceId);
     if (
       !(await this.prisma.serviceProvided.count({
         where: {

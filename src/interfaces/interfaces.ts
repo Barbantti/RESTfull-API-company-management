@@ -20,12 +20,6 @@ export interface ICustomer {
   departments: IDepartments[];
   customerBudgets: ICustomerBudgets[];
 }
-
-export interface ICustomerLogin {
-  email: string;
-  password: string;
-}
-
 export interface IEmployees {
   firstName: string;
   lastName: string;

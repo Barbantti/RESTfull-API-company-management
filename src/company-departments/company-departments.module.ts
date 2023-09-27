@@ -7,6 +7,7 @@ import { CompanyEmployeesModule } from 'src/company-employees/company-employees.
 import { CompanyEmployeesService } from 'src/company-employees/company-employees.service';
 import { CompanyEmployeesController } from 'src/company-employees/company-employees.controller';
 import { AuthenticationModule } from 'src/authentication/authentication.module';
+import { CustomerService } from 'src/customer/customer.service';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { AuthenticationModule } from 'src/authentication/authentication.module';
     PrismaService,
     CompanyDepartmentsService,
     CompanyEmployeesService,
+    CustomerService,
   ],
   exports: [CompanyDepartmentsService],
 })

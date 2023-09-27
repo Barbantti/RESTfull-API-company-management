@@ -12,9 +12,9 @@ export class CustomerBudgetsService {
 
   // Create new budget
   async createNewBudget(data: ICustomerBudgets) {
+    console.log('createNewBudget: ', data);
     // Checking data
     if (data) {
-      console.log('CREATE NEW BUDGET: ', data);
       const newBudget = await this.prisma.budgets.create({ data });
       return newBudget;
     } else {
@@ -26,11 +26,13 @@ export class CustomerBudgetsService {
 
   // Search all budgets on db
   async getAllBudgets() {
+    console.log('getAllBudgets: ', );
     return await this.prisma.budgets.findMany();
   }
 
   // Search a budget by id
   async getBudgetById(id: string) {
+    console.log('getBudgetById: ', id);
     await this.checkBudgetId(id);
     return await this.prisma.budgets.findUnique({
       where: {
@@ -42,6 +44,7 @@ export class CustomerBudgetsService {
   // Updating a budget
   async updateBudgetById(data: ICustomerBudgets, id: string) {
     await this.checkBudgetId(id);
+    console.log('updateBudgetById: ', data, id);
     if (data && id) {
       const updateBudget = await this.prisma.budgets.update({
         data,
@@ -57,6 +60,7 @@ export class CustomerBudgetsService {
 
   // Delete a budget
   async deleteBudgetById(id: string) {
+    console.log('deleteBudgetById: ', id);
     await this.checkBudgetId(id);
     return this.prisma.budgets.delete({
       where: {
@@ -67,6 +71,7 @@ export class CustomerBudgetsService {
 
   // Checking if budget exist
   async checkBudgetId(id: string) {
+    console.log('checkBudgetId: ', id);
     if (
       !(await this.prisma.budgets.count({
         where: {

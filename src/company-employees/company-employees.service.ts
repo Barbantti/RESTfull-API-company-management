@@ -15,6 +15,7 @@ export class CompanyEmployeesService {
 
   // create new employee
   async createNewEmployee(data: IEmployees) {
+    console.log('createNewEmployee: ', data);
     // Checking min length pass
     if (data) {
       if (data.password.length < 6) {
@@ -71,6 +72,7 @@ export class CompanyEmployeesService {
     employeeId: string,
     departmentName: DeptAreas,
   ) {
+    console.log('associateDepartmentToEmployee: ', employeeId, departmentName);
     // Assign employee to department
     const validDeptAreas: DeptAreas[] = Object.values(DeptAreas);
 
@@ -118,12 +120,15 @@ export class CompanyEmployeesService {
 
   // Search all employees on db
   async getAllEmployee() {
+    console.log('associateDepartmentToEmployee: ', );
+
     return await this.prisma.employees.findMany();
   }
 
   // Search a employee by id
   async getEmployeeById(id: string) {
     await this.checkEmployeeId(id);
+    console.log('getEmployeeById: ', id);
 
     if (id) {
       return await this.prisma.employees.findUnique({
@@ -139,6 +144,7 @@ export class CompanyEmployeesService {
   // Updating employee data
   async updateEmployeeData(data: IEmployees, id: string) {
     await this.checkEmployeeId(id);
+    console.log('updateEmployeeData: ', data, id);
 
     if (data && id) {
       // Checking min length pass
@@ -182,6 +188,7 @@ export class CompanyEmployeesService {
 
   // Deleting employee data as need
   async deleteEmployeeData(id: string) {
+    console.log('deleteEmployeeData: ', id);
     await this.checkEmployeeId(id);
 
     if (id) {
@@ -197,6 +204,7 @@ export class CompanyEmployeesService {
 
   // Checking if employee exist
   async checkEmployeeId(id: string) {
+    console.log('checkEmployeeId: ', id);
     if (
       !(await this.prisma.employees.count({
         where: {
@@ -210,6 +218,7 @@ export class CompanyEmployeesService {
 
   // Checking if department exist
   async validateDepartmentId(id: string) {
+    console.log('validateDepartmentId: ', id);
     const departmentExists = await this.prisma.departments.count({
       where: {
         id,
@@ -224,6 +233,7 @@ export class CompanyEmployeesService {
 
   // Get employee role level
   async getEmployeeRoleLevel(employeeId: string) {
+    console.log('getEmployeeRoleLevel: ', employeeId);
     const employee = await this.prisma.employees.findUnique({
       where: {
         id: employeeId,

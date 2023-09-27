@@ -12,6 +12,7 @@ export class CompanyDepartmentsService {
 
   // Create new Department
   async createNewDepartment(data: IDepartments) {
+    console.log('createNewDepartment: ', data);
     if (data) {
       const { name, isActive } = data;
       return await this.prisma.departments.create({
@@ -29,11 +30,13 @@ export class CompanyDepartmentsService {
 
   // Search for all departments
   async getAllDepartments() {
+    console.log('getAllDepartments: ', );
     return await this.prisma.departments.findMany({ where: {} });
   }
 
   // Search a department by id
   async getDepartmentById(id: string) {
+    console.log('getDepartmentById: ', id);
     await this.checkDepartmentId(id);
 
     if (id) {
@@ -50,6 +53,7 @@ export class CompanyDepartmentsService {
   // Updating department data
   async updateDepartmentData(id: string, data: IDepartments) {
     await this.checkDepartmentId(id);
+    console.log('updateDepartmentData: ', id, data);
 
     if (id && data) {
       return await this.prisma.departments.update({
@@ -67,6 +71,7 @@ export class CompanyDepartmentsService {
   // Deleting a department data as need
   async deleteDepartmentData(id: string) {
     await this.checkDepartmentId(id);
+    console.log('deleteDepartmentData: ', id);
 
     if (id) {
       await this.prisma.departments.delete({
@@ -81,6 +86,7 @@ export class CompanyDepartmentsService {
 
   // Checking if department exist
   async checkDepartmentId(id: string) {
+    console.log('checkDepartmentId: ', id);
     if (
       !(await this.prisma.departments.count({
         where: { id },
@@ -92,6 +98,7 @@ export class CompanyDepartmentsService {
 
   // Checking if employee id exist in a junction dept
   async checkEmployeeId(employeeId: string) {
+    console.log('checkEmployeeId: ', employeeId);
     if (
       !(await this.prisma.deptEmployee.findFirst({
         where: {

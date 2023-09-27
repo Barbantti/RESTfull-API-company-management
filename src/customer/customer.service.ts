@@ -14,6 +14,7 @@ export class CustomerService {
 
   //   createNewCustomer
   async createNewCustomer(data: ICustomer) {
+    console.log('createNewCustomer: ', data);
     if (data) {
       // Checking min length pass
       console.log('DATA:', data);
@@ -55,11 +56,13 @@ export class CustomerService {
 
   // Search all customer on db
   async getAllCustomer() {
+    console.log('getAllCustomer: ', );
     return await this.prisma.customer.findMany();
   }
 
   // Search a customer by id
   async getCustomerById(id: string) {
+    console.log('getCustomerById: ', id);
     await this.checkCustomerId(id);
 
     if (id) {
@@ -75,6 +78,7 @@ export class CustomerService {
   // Updating customer data
   async updateCustomerData(data: ICustomer, id: string) {
     await this.checkCustomerId(id);
+    console.log('updateCustomerData: ', data, id);
 
     if (id) {
       // Checking min length pass
@@ -108,6 +112,7 @@ export class CustomerService {
   // Deleting customer data as need
   async deleteCustomerData(id: string) {
     await this.checkCustomerId(id);
+    console.log('deleteCustomerData: ', id);
 
     if (id) {
       return await this.prisma.customer.delete({
@@ -122,6 +127,7 @@ export class CustomerService {
 
   // Checking if customer exist
   async checkCustomerId(id: string) {
+    console.log('checkCustomerId: ', id);
     if (
       !(await this.prisma.customer.count({
         where: {
@@ -135,6 +141,7 @@ export class CustomerService {
 
   // Checking if budget exist
   async checkBudgetId(id: string) {
+    console.log('checkBudgetId: ', id);
     if (
       !(await this.prisma.budgets.count({
         where: {
@@ -148,6 +155,7 @@ export class CustomerService {
 
   // Checking if employee exist
   async checkEmployeeId(id: string) {
+    console.log('checkEmployeeId: ', id);
     if (
       !(await this.prisma.employees.findFirst({
         where: {
@@ -161,6 +169,7 @@ export class CustomerService {
 
   // Get customer role level
   async getCustomerRoleLevel(customerId: string) {
+    console.log('getCustomerRoleLevel: ', customerId);
     const customer = await this.prisma.customer.findUnique({
       where: {
         id: customerId,

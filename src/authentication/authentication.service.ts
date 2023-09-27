@@ -27,11 +27,43 @@ export class AuthenticationService {
     private readonly employeeService: CompanyEmployeesService,
   ) {}
 
+  async checkTokenValidation(token: string) {
+    try {
+      if (token) {
+        // Verifica o token como cliente
+        const customerData = await this.jwtService.verify(token, {
+          issuer: this.customerIssuer,
+          audience: this.customerAudience,
+        });
+        return customerData;
+      } else {
+        // Se nenhum token for fornecido, lança uma exceção
+        throw new BadRequestException('Invalid token!');
+      }
+    } catch (customerError) {
+      try {
+        // Se ocorrer um erro ao validar como cliente, tenta validar como funcionário
+        const employeeData = await this.jwtService.verify(token, {
+          issuer: this.employeeIssuer,
+          audience: this.employeeAudience,
+        });
+        return employeeData;
+      } catch (employeeError) {
+        // Se ocorrer um erro ao validar como funcionário, lança uma exceção
+        throw new BadRequestException(
+          'Error to validating token, please contact the operational sector for more information',
+          employeeError,
+        );
+      }
+    }
+  }
+
   // Generating customer token
   async createCustomerToken(customer: Customer) {
+    console.log('createCustomerToken', customer);
     if (customer) {
       return await {
-        accessCustomerToken: this.jwtService.sign(
+        customerToken: this.jwtService.sign(
           {
             id: customer.id,
             firstName: customer.firstName,
@@ -54,9 +86,10 @@ export class AuthenticationService {
   }
   // Generating customer token
   async createEmployeeToken(employee: Employees) {
+    console.log('createEmployeeToken', employee);
     if (employee) {
       return await {
-        accessEmployeeToken: this.jwtService.sign(
+        employeeToken: this.jwtService.sign(
           {
             id: employee.id,
             firstName: employee.firstName,
@@ -79,6 +112,7 @@ export class AuthenticationService {
   }
   // Checking token validation
   async checkCustomerTokenValidation(customerToken: string) {
+    console.log('checkCustomerTokenValidation: ', customerToken);
     try {
       if (customerToken) {
         const data = await this.jwtService.verify(customerToken, {
@@ -96,6 +130,7 @@ export class AuthenticationService {
   }
   // Checking employee token validation
   async checkEmployeeTokenValidation(employeeToken: string) {
+    console.log('checkEmployeeTokenValidation: ', employeeToken);
     try {
       if (employeeToken) {
         const data = await this.jwtService.verify(employeeToken, {
@@ -113,6 +148,7 @@ export class AuthenticationService {
   }
   // If customer token is validated it returns true, if not return false
   isCustomerValidToken(customerToken: string) {
+    console.log('isCustomerValidToken', customerToken);
     if (customerToken) {
       this.checkCustomerTokenValidation(customerToken);
       return true;
@@ -123,6 +159,7 @@ export class AuthenticationService {
 
   // If employee token is validated it returns true, if not return false
   isEmployeeValidToken(employeeToken: string) {
+    console.log('isEmployeeValidToken', employeeToken);
     if (employeeToken) {
       this.checkEmployeeTokenValidation(employeeToken);
       return true;
@@ -132,6 +169,7 @@ export class AuthenticationService {
   }
 
   async customerLogin(email: string, password: string) {
+    console.log('customerLogin', email, password);
     const customer = await this.prisma.customer.findFirst({
       where: {
         email,
@@ -151,6 +189,7 @@ export class AuthenticationService {
   }
 
   async employeeLogin(email: string, password: string) {
+    console.log('employeeLogin', email, password);
     const employee = await this.prisma.employees.findFirst({
       where: {
         email,
@@ -171,6 +210,7 @@ export class AuthenticationService {
 
   // Checking customer data for reset password
   async customerForget(email: string, birthDate: string) {
+    console.log('customerForget', email, birthDate);
     try {
       birthDate = moment(birthDate, 'DD-MM-YYYY').format(
         'YYYY-MM-DDT00:00:00.000-00:00',
@@ -209,6 +249,7 @@ export class AuthenticationService {
 
   // Checking customer data for reset password
   async employeeForget(email: string, birthDate: string) {
+    console.log('employeeForget', email, birthDate);
     try {
       birthDate = moment(birthDate, 'DD-MM-YYYY').format(
         'YYYY-MM-DDT00:00:00.000-00:00',
@@ -247,6 +288,7 @@ export class AuthenticationService {
 
   // Resetting customer password
   async customerResetPassword(password: string, token: string) {
+    console.log('customerResetPassword', password, token);
     // Validating token
 
     try {
@@ -281,6 +323,7 @@ export class AuthenticationService {
 
   // Resetting employee password
   async employeeResetPassword(password: string, token: string) {
+    console.log('employeeResetPassword', password, token);
     // Validating token
 
     try {
@@ -315,6 +358,7 @@ export class AuthenticationService {
 
   // Registering customer with token
   async customerRegister(data: ICustomer) {
+    console.log('customerRegister', data);
     if (data) {
       const customer = await this.customerService.createNewCustomer(data);
 
@@ -323,6 +367,7 @@ export class AuthenticationService {
   }
   // Registering customer with token
   async employeeRegister(data: IEmployees) {
+    console.log('employeeRegister', data);
     if (data) {
       const employee = await this.employeeService.createNewEmployee(data);
 

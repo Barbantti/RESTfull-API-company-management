@@ -11,8 +11,8 @@ import { CompanyEmployeesService } from './company-employees.service';
 import { IEmployees } from 'src/interfaces/interfaces';
 import { GetId } from 'src/decorators/param-id.decorator';
 import { Roles } from 'src/decorators/roles.decorator';
-import { EmployeeAuthenticationGuard } from 'src/Guards/employeeAuthentication.guard';
-import { EmployeeRoleGuard } from 'src/Guards/employeeRole.guard';
+import { RoleGuard } from 'src/Guards/role.guard';
+import { AuthGuard } from 'src/Guards/auth.guard';
 
 @Controller('company-employees')
 export class CompanyEmployeesController {
@@ -29,7 +29,7 @@ export class CompanyEmployeesController {
   // GET all employeeRoute
   @Get()
   @Roles(['employee', 'developer'])
-  @UseGuards(EmployeeAuthenticationGuard, EmployeeRoleGuard)
+  @UseGuards(AuthGuard, RoleGuard)
   async getAllEmployee() {
     return await this.companyEmployeeService.getAllEmployee();
   }
@@ -37,7 +37,7 @@ export class CompanyEmployeesController {
   // GET employeeRouteById
   @Get(':id')
   @Roles(['employee', 'developer'])
-  @UseGuards(EmployeeAuthenticationGuard, EmployeeRoleGuard)
+  @UseGuards(AuthGuard, RoleGuard)
   async getEmployeeById(@GetId() id: string) {
     return await this.companyEmployeeService.getEmployeeById(id);
   }
@@ -45,14 +45,14 @@ export class CompanyEmployeesController {
   // PATCH update employeeRouteById
   @Patch(':id')
   @Roles(['employee', 'developer'])
-  @UseGuards(EmployeeAuthenticationGuard, EmployeeRoleGuard)
+  @UseGuards(AuthGuard, RoleGuard)
   async updateEmployeeData(@Body() data: IEmployees, @GetId() id: string) {
     return await this.companyEmployeeService.updateEmployeeData(data, id);
   }
 
   // DELETE employeeRouteById
   @Roles(['developer'])
-  @UseGuards(EmployeeAuthenticationGuard, EmployeeRoleGuard)
+  @UseGuards(AuthGuard, RoleGuard)
   @Delete(':id')
   async deleteEmployeeData(@GetId() id: string) {
     return await this.companyEmployeeService.deleteEmployeeData(id);

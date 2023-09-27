@@ -10,15 +10,12 @@ import {
 import { CustomerBudgetsService } from './customer-budgets.service';
 import { ICustomerBudgets } from 'src/interfaces/interfaces';
 import { GetId } from 'src/decorators/param-id.decorator';
-
 import { Roles } from 'src/decorators/roles.decorator';
-import { EmployeeAuthenticationGuard } from 'src/Guards/employeeAuthentication.guard';
-import { EmployeeRoleGuard } from 'src/Guards/employeeRole.guard';
-import { CustomerAuthenticationGuard } from 'src/Guards/customerAuthentication.guard';
-import { CustomerRoleGuard } from 'src/Guards/customerRole.guard';
+import { RoleGuard } from 'src/Guards/role.guard';
+import { AuthGuard } from 'src/Guards/auth.guard';
 
 @Roles(['developer', 'customer'])
-@UseGuards(EmployeeAuthenticationGuard, EmployeeRoleGuard)
+@UseGuards(AuthGuard, RoleGuard)
 @Controller('customer-budgets')
 export class CustomerBudgetsController {
   constructor(
@@ -27,8 +24,7 @@ export class CustomerBudgetsController {
 
   // Creating new budget
   // POST budget route
-  @Roles(['employee'])
-  @UseGuards(CustomerAuthenticationGuard, CustomerRoleGuard)
+  @Roles(['employee', 'customer'])
   @Post()
   async createNewBudget(@Body() data: ICustomerBudgets) {
     console.log('NEW BUDGET: ', data);

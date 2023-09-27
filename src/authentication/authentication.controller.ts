@@ -5,9 +5,7 @@ import { AuthenticationService } from './authentication.service';
 import { AuthenticationResetDTO } from './dto/authentication-reset.dto';
 import { EmployeeDecorator } from 'src/decorators/employee.decorator';
 import { CustomerDecorator } from 'src/decorators/customer.decorator';
-import { CustomerAuthenticationGuard } from 'src/Guards/customerAuthentication.guard';
-import { EmployeeAuthenticationGuard } from 'src/Guards/employeeAuthentication.guard';
-
+import { AuthGuard } from 'src/Guards/auth.guard';
 @Controller('authentication')
 export class AuthenticationController {
   constructor(private readonly authenticationService: AuthenticationService) {}
@@ -63,15 +61,18 @@ export class AuthenticationController {
     );
   }
 
-  @UseGuards(CustomerAuthenticationGuard)
-  @Post('Customer/profile/')
+  @UseGuards(AuthGuard)
+  @Post('customer/profile/')
   async customerProfile(@CustomerDecorator() customer) {
     return await { customer };
   }
 
-  @UseGuards(EmployeeAuthenticationGuard)
+  @UseGuards(AuthGuard)
   @Post('employee/profile/')
   async employeeProfile(@EmployeeDecorator() employee) {
-    return await { employee };
+    {
+      console.log('employeeProfile', employee);
+      return await { employee };
+    }
   }
 }

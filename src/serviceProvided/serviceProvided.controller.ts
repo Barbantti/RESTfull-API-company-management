@@ -13,13 +13,14 @@ import { GetId } from 'src/decorators/param-id.decorator';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 import { Roles } from 'src/decorators/roles.decorator';
-import { EmployeeAuthenticationGuard } from 'src/Guards/employeeAuthentication.guard';
-import { EmployeeRoleGuard } from 'src/Guards/employeeRole.guard';
-import { CustomerAuthenticationGuard } from 'src/Guards/customerAuthentication.guard';
-import { CustomerRoleGuard } from 'src/Guards/customerRole.guard';
+import { RoleGuard } from 'src/Guards/role.guard';
+import { AuthGuard } from 'src/Guards/auth.guard';
 
-@Roles(['customer, developer', 'customer'])
-@UseGuards(EmployeeAuthenticationGuard, EmployeeRoleGuard)
+@Roles(['customer, developer'])
+@UseGuards(
+  AuthGuard,
+  RoleGuard
+)
 @Controller('budget')
 export class ServiceProvidedController {
   constructor(

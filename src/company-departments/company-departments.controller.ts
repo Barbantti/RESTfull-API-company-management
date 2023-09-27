@@ -12,11 +12,11 @@ import { CompanyDepartmentsService } from './company-departments.service';
 import { IDepartments } from 'src/interfaces/interfaces';
 import { GetId } from 'src/decorators/param-id.decorator';
 import { Roles } from 'src/decorators/roles.decorator';
-import { EmployeeAuthenticationGuard } from 'src/Guards/employeeAuthentication.guard';
-import { EmployeeRoleGuard } from 'src/Guards/employeeRole.guard';
+import { RoleGuard } from 'src/Guards/role.guard';
+import { AuthGuard } from 'src/Guards/auth.guard';
 
 @Roles(['employee', 'developer'])
-@UseGuards(EmployeeAuthenticationGuard, EmployeeRoleGuard)
+@UseGuards(AuthGuard, RoleGuard)
 @Controller('company-departments')
 export class CompanyDepartmentsController {
   constructor(

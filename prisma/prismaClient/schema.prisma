@@ -38,7 +38,7 @@ model Employees {
   address         String            @db.VarChar(75)
   wage            String            @db.VarChar(75)
   role            String            @db.VarChar(75)
-  roleLevel       RoleLevel?        @default(customer)
+  roleLevel       RoleLevel?        @default(employee)
   positionTitle   String            @db.VarChar(75)
   password        String            @db.VarChar(75)
   createdAt       DateTime          @default(now())
